@@ -5,7 +5,12 @@ import { verifyUser } from "../services/auth";
 
 
 export const getAllCars: RequestHandler = async (req, res, next) => {
-    let cars = await Car.findAll();
+    let cars = await Car.findAll({
+        include: [{
+          model: User,
+          required: true
+         }]
+      });
     res.status(200).json(cars);
 }
 
@@ -17,7 +22,7 @@ export const createCar: RequestHandler = async (req, res, next) => {
     }
     
     let newCar: Car = req.body;
-    newCar.carId = user.id;
+   newCar.userId = user.id
     
     if (newCar.make) {
         let created = await Car.create(newCar);
@@ -29,6 +34,11 @@ export const createCar: RequestHandler = async (req, res, next) => {
 }
 
 export const updateCar: RequestHandler = async (req, res, next) => {
+    let user: User | null = await verifyUser(req);
+   if (!user) {
+    return res.status(401).json( { message: 'user not found'})
+   }
+
     let carId = req.params.id;
     let newCar: Car = req.body;
     
@@ -36,11 +46,17 @@ export const updateCar: RequestHandler = async (req, res, next) => {
     console.log('newCar:', newCar);
 
     let carFound = await Car.findByPk(carId);
-    console.log('Car found:', carFound);
+    // console.log('Car found:', carFound);
+
+    if (!carFound) {
+        return res.status(404).json( {message: 'car not found'});
+    } else if (carFound.userId !== user.id) {
+        return res.status(401).json ({message: 'user is not owner of car'})
+    } 
     
     if (carFound && carFound.carId == newCar.carId
         && newCar.make && newCar.model && newCar.year && newCar.color && newCar.miles 
-    && newCar.city && newCar.state && newCar.price && newCar.username) {
+    && newCar.city && newCar.state && newCar.price) {
             await Car.update(newCar, {
                 where: { carId: carId }
             });
@@ -79,5 +95,22 @@ export const getCar: RequestHandler = async (req, res, next) => {
     }
     else {
         res.status(404).json({});
+    }
+}
+
+export const getCarByMake: RequestHandler = async (req, res, next) => {
+    let make = req.params.make;
+    
+    console.log(`Searching for car with model: ${make}`); // Log the model parameter
+    
+    let carFound =  await Car.findOne({ where: {make} });
+    
+    console.log(`Car found: ${carFound}`); // Log the result of the query
+    
+    if (carFound) {
+        res.status(200).json(carFound);
+    }
+    else {
+        res.status(404).json({ message: 'car not found'});
     }
 }

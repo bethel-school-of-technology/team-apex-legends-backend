@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { createUser, loginUser, getAllUsers, getUser,  } from '../controllers/userController';
+import { createUser, loginUser, getAllUsers, getUser, getUserByUsername,  } from '../controllers/userController';
 
 
 const router = Router();
@@ -8,8 +8,9 @@ const router = Router();
 
 router.post('/', createUser);
 router.post('/login', loginUser);
-router.get('/:id', getUser);
+router.get('/id/:id', getUser);
 router.get('/', getAllUsers);
+router.get('/username/:username', getUserByUsername);
 
 
 export default router;

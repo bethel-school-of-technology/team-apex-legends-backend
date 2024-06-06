@@ -12,7 +12,7 @@ export class Car extends Model<InferAttributes<Car>, InferCreationAttributes<Car
     declare city: string;
     declare state: string;
     declare price: number;
-    declare username: string;
+    declare userId: number;
   
 }
 
@@ -57,9 +57,9 @@ export function CarFactory(sequelize: Sequelize) {
         type: DataTypes.INTEGER,
         allowNull: false        
     },
-    username: {
-        type: DataTypes.STRING,
-        allowNull: false        
+    userId: {
+        type: DataTypes.INTEGER,
+        allowNull: false
     }
   
 
@@ -70,6 +70,10 @@ export function CarFactory(sequelize: Sequelize) {
     sequelize
 });
 
+
+
+    User.hasMany(Car, { foreignKey: 'userId' });
+    Car.belongsTo(User, { foreignKey: 'userId' });
 
 
 }

@@ -15,9 +15,12 @@ export const comparePasswords = async (plainTextPassword: string, hashPassword: 
     return await bcrypt.compare(plainTextPassword, hashPassword);
 }
 
+
+
 export const signUserToken = async (user: User) => {
     let token = jwt.sign(
         { userId: user.id },
+        
         secret,
         { expiresIn: '1hr' }
     );

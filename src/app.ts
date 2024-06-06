@@ -20,7 +20,7 @@ app.use(express.urlencoded({extended: true}));
 
 // // routes
 app.use('/api/car', carRoutes);
-app.use('/api/users', userRoutes);
+app.use('/api/user', userRoutes);
 
 app.use((req: Request, res: Response, next: NextFunction) => {
     res.status(404).end();

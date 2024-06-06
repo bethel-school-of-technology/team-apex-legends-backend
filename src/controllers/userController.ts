@@ -21,7 +21,6 @@ import { comparePasswords, hashPassword, signUserToken, verifyUser } from "../se
 
 
 
-
 export const loginUser: RequestHandler = async (req, res, next) => {
     // Look up user by their username
     let existingUser: User | null = await User.findOne({ 
@@ -46,20 +45,19 @@ export const loginUser: RequestHandler = async (req, res, next) => {
     }
 }
 
-export const getUser: RequestHandler = async (req, res, next) => {
-    let user: User | null = await verifyUser(req);
-    
 
-    if (user) {
-        let { username } = user;
-        res.status(200).json({
-            username
-        });
+export const getUser: RequestHandler = async (req, res, next) => {
+    let userId = req.params.id;
+    let userFound =  await User.findByPk(userId);
+    
+    if (userFound) {
+        res.status(200).json(userFound);
     }
     else {
-        res.status(401).send();
+        res.status(404).json({});
     }
 }
+
 
 
 export const getAllUsers: RequestHandler = async (req, res, next) => {
@@ -67,3 +65,19 @@ export const getAllUsers: RequestHandler = async (req, res, next) => {
     res.status(200).json(user);
 }
 
+
+
+export const getUserByUsername: RequestHandler = async (req, res, next) => {
+   
+        const username = req.params.username;
+        console.log(`Searching for user with username: ${username}`); // Log the username parameter
+
+        const user = await User.findOne({ where: { username } });
+        console.log(`User found: ${user}`); // Log the result of the query
+
+        if (user) {
+            res.status(200).json(user);
+        } else {
+            res.status(404).json({ message: 'User not found' });
+        }
+    }; 
