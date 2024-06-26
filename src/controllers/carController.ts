@@ -114,3 +114,20 @@ export const getCarByMake: RequestHandler = async (req, res, next) => {
         res.status(404).json({ message: 'car not found'});
     }
 }
+
+export const getCarByUserId: RequestHandler = async (req, res, next) => {
+    let userId = req.params.userId; // Assuming userId is passed as a route parameter
+    
+        let cars = await Car.findAll({
+            where: { userId: userId }
+        });
+        console.log(userId)
+
+        if (cars.length > 0) {
+            res.status(200).json(cars);
+        } else {
+            res.status(404).json({ message: 'No cars found for the user' });
+        }
+    
+}
+   

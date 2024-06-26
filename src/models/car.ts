@@ -12,6 +12,7 @@ export class Car extends Model<InferAttributes<Car>, InferCreationAttributes<Car
     declare city: string;
     declare state: string;
     declare price: number;
+    declare imgUrl: string;
     declare userId: number;
   
 }
@@ -56,6 +57,10 @@ export function CarFactory(sequelize: Sequelize) {
     price: {
         type: DataTypes.INTEGER,
         allowNull: false        
+    },
+    imgUrl: {
+        type: DataTypes.STRING,
+        allowNull: false
     },
     userId: {
         type: DataTypes.INTEGER,
