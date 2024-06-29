@@ -56,7 +56,7 @@ export const updateCar: RequestHandler = async (req, res, next) => {
     
     if (carFound && carFound.carId == newCar.carId
         && newCar.make && newCar.model && newCar.year && newCar.color && newCar.miles 
-    && newCar.city && newCar.state && newCar.price) {
+    && newCar.city && newCar.state && newCar.price && newCar.imgUrl && newCar.description) {
             await Car.update(newCar, {
                 where: { carId: carId }
             });

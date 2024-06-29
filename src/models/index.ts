@@ -5,7 +5,7 @@ import { CarFactory } from "./car";
 
 const dbName = 'carshopdb';
 const username = 'root';
-const password = 'Password1!';
+const password = 'GENchurch18!';
 
 const sequelize = new Sequelize(dbName, username, password, {
     host: 'localhost',
